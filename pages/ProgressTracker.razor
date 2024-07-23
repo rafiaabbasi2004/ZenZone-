@@ -1,0 +1,148 @@
+﻿@page "/tracker"
+@using System
+@using Microsoft.AspNetCore.Components
+@using System.Data
+@using System.Threading.Tasks
+@inject MindfulnessExerciseService MindfulnessService
+@using testdatabase.DataLayer
+@inject UserState userstate
+@inject NavigationManager Navigation
+@inject DataAccess data
+@inject TrailService TrailService
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Poetsen+One&family=Risque&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+
+<body>
+    <div class="main">
+        <div class="heading">
+            <h1>Your Progress Tracker</h1>
+        </div>
+
+        @if (userstate.IsLoggedIn)
+        {
+            <div class="row">
+                <div class="col-xl-3">
+                    <div class="progress-bar-animated">
+                        <h2 class="sub-headings">@userstate.Email</h2>
+                    </div>
+                </div>
+
+                <div class="col-xl-3">
+                    <div class="progress-bar-animated">
+                        <h2 class="sub-headings">@userstate.FirstName </h2>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="progress-cycles">
+            <div class="row">
+                <div class="col-xl-3">
+                    <div class="progress-bar-animated">
+                        <h2 class="sub-headings">Mindful Moments</h2>
+                    </div>
+                    <div class="progress-details">
+                        <div class="progress">
+                            <div class="progress-bar" style="width: @(mindfulnessProgressPercentage)%;">
+                                <span>@mindfulnessProgressPercentage%</span>
+                            </div>
+                        </div>
+                        <div class="description">
+                            <p>You have completed @completedExercises.Count out of @totalExercises exercises.</p>
+                            @foreach (var exercise in completedExercises)
+                            {
+                                <ul>
+                                    <li>@exercise.Description</li>
+                                </ul>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3">
+                    <div class="progress-bar-animated">
+                        <h2 class="sub-headings">Tranquil Trails</h2>
+                    </div>
+                    <div class="progress-details">
+                        <div class="progress">
+                            <div class="progress-bar" style="width: @(trailProgressPercentage)%;">
+                                <span>@trailProgressPercentage%</span>
+                            </div>
+                        </div>
+                        <div class="description">
+                            <p>You have watched @watchedTrails.Count out of @totalTrails trails.</p>
+                            @foreach (var trail in watchedTrails)
+                            {
+                                <ul>
+                                    <li>@trail.Title: @trail.Description</li>
+                                </ul>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3">
+                    <div class="progress-bar-animated">
+                        <h2 class="sub-headings">Serene Sounds</h2>
+                    </div>
+                    <div class="progress-details">
+                        <div class="progress">
+                            <div class="progress-bar" style="width: @(sereneSoundsProgressPercentage)%;">
+                                <span>@sereneSoundsProgressPercentage%</span>
+                            </div>
+                        </div>
+                        <div class="description">
+                            <p>You have played @playedMedia.Count out of @totalMedia available media.</p>
+                            @foreach (var media in playedMedia)
+                            {
+                                <ul>
+                                    <li>@media</li>
+                                </ul>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+@code {
+    private int totalExercises;
+    private int completedExercisesCount;
+    private int mindfulnessProgressPercentage;
+    private List<MindfulnessExercise> completedExercises;
+
+    private int totalTrails;
+    private int watchedTrailsCount;
+    private int trailProgressPercentage;
+    private List<Trail> watchedTrails;
+
+    private int totalMedia = 4; // Number of available sounds/videos
+    private List<string> playedMedia = new List<string>(); // Ensure it is initialized
+    private int sereneSoundsProgressPercentage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Load Mindfulness Exercises Progress
+        totalExercises = MindfulnessService.GetAvailableExercises().Count;
+        completedExercises = MindfulnessService.GetCompletedExercises(userstate.Email);
+        completedExercisesCount = completedExercises.Count;
+        mindfulnessProgressPercentage = (int)((double)completedExercisesCount / totalExercises * 100);
+
+        // Load Tranquil Trails Progress
+        var userEmail = userstate.Email;
+        watchedTrails = TrailService.GetUserWatchedTrails(userEmail);
+        totalTrails = (await TrailService.GetTrails()).Count;
+        watchedTrailsCount = watchedTrails.Count;
+        trailProgressPercentage = (int)((double)watchedTrailsCount / totalTrails * 100);
+
+
+        playedMedia = userstate.GetPlayedMedia() ?? new List<string>(); // Initialize if null
+        sereneSoundsProgressPercentage = (int)((double)playedMedia.Count / totalMedia * 100);
+    }
+}
+}

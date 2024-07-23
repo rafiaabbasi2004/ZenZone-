@@ -1,0 +1,147 @@
+﻿/* Body Styling */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #b4aec4;
+    background-color: #0f291a /* Background color for the rest of the page */
+}
+
+/* Mindful Moments Container */
+.mindful-moments-container {
+    text-align: center;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #20634c /* Semi-transparent white background */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.9); /* Box shadow for container */
+}
+
+/* Mindful Moments Header */
+.mindful-moments-header {
+    background-image: url('/images/mindful.jpg');
+    background-size: cover;
+    background-position: center;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.mindful-moments-heading,
+.mindful-moments-description {
+    margin: 0;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: white;
+}
+
+.mindful-moments-heading {
+    font-size: 35px;
+    font-style: oblique;
+}
+
+.mindful-moments-description {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/* Start Button */
+.mindful-moments-button {
+    background-color: #a5b8a8;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+    .mindful-moments-button:hover {
+        background-color: #265535;
+    }
+
+/* Separator Line */
+.separator-line {
+    border-top: 1px solid #a5b8a8;
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Exercise Card Container */
+.exercise-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.exercise-card {
+    background-color: #20634c;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    padding: 10px;
+    position: relative;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+    .exercise-card:hover {
+        transform: scale(1.05);
+    }
+
+.exercise-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* Ongoing Exercise Container */
+.ongoing-exercise-container {
+    text-align: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-top: 20px;
+}
+
+.timer-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Buttons Container */
+.buttons-container {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Appreciation Message */
+.appreciation-message {
+    font-size: 18px;
+    color: #65937c;
+    font-weight: bold;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-style: oblique;
+}
+
+.completed-label {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: green;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}

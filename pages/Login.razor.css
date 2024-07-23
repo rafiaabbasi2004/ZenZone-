@@ -1,0 +1,128 @@
+﻿body, html {
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Set height to 100vh to cover the entire screen */
+}
+
+.welcome-message {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #e3f2fd;
+    color: #0d47a1;
+    font-size: 1.5em;
+    text-align: center;
+    border-radius: 5px;
+}
+
+
+.background-image {
+    height: 100vh; /* Set height to 100vh to cover the entire screen */
+    width: 100%;
+    background-image: url('https://images.unsplash.com/photo-1580490142450-a97fa584a413?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Replace with your background image URL */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    width: 90%;
+    max-width: 400px;
+    background: transparent; /* Semi-transparent white background */
+    border-radius: 20px; /* Rounded corners */
+    border-block-color: black;
+    padding: 40px; /* Add some padding */
+    box-shadow: 0 0 20px #808080; /* Add a shadow effect */
+}
+
+.input-selector {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px; /* Rounded input fields */
+    border: 1px solid black;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.wrapper {
+    color: #ffffff; /* Text color */
+}
+
+    .wrapper h1 {
+        font-size: 30px;
+        text-align: center;
+        margin-bottom: 30px; /* Add space below the heading */
+    }
+
+.input-box {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+    .input-box input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px; /* Rounded input fields */
+        border: 1px solid black; /* Border color */
+    }
+
+    .input-box i {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+    }
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+    .remember-forgot label {
+        margin-right: 10px;
+        color: #ffffff; /* Change text color to white */
+    }
+
+    .remember-forgot a {
+        color: #375141; /* Link color */
+        text-decoration: underline; /* Underline link */
+        text-underline-offset: 2px; /* Add space below the underline */
+    }
+
+
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: #173722; /* Button color */
+    color: #fff; /* Text color */
+    border: none;
+    border-radius: 5px; /* Rounded button */
+    cursor: pointer;
+}
+
+    .btn:hover {
+        background-color: #ffffff; /* Button color on hover */
+        color: #173722; /* Change text color to dark green */
+    }
+
+.register-link {
+    text-align: center;
+    margin-top: 20px; /* Add space above the register link */
+}
+
+    .register-link a {
+        color: #375141; /* Link color */
+        text-decoration: none;
+    }
+
+        .register-link a:hover {
+            text-decoration: underline; /* Underline link on hover */
+            text-underline-offset: 2px; /* Add space below the underline */
+        }

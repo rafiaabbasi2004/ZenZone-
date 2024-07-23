@@ -1,0 +1,67 @@
+﻿@using System;
+@using Microsoft.AspNetCore.Components;
+@using System.Threading.Tasks;
+
+@page "/add"
+
+@inject DatabaseService DatabaseService  // Inject the database service
+@inject NavigationManager NavigationManager
+
+<div class="register-page">
+    <div class="signup-container">
+       
+
+        <EditForm Model="users" OnValidSubmit="HandleValidSubmit">
+            <!-- Form for adding a user -->
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <h2>Sign Up</h2>
+            <div class="form-outline">
+                <label for="username">Email</label>
+                <input type="email" id="username" @bind="users.Email" />
+            </div>
+            <div class="form-outline">
+                <label for="email">First Name</label>
+                <input type="Name" id="email" @bind="users.FirstName" />
+            </div>
+            <div class="form-outline">
+                <label for="Text">Last name</label>
+                <input type="text" id="password" @bind="users.LastName" />
+            </div>
+            <div class="form-outline">
+                <label for="dob">Date of birth</label>
+                <input type="text" @bind="users.DateofBirth" />
+            </div>
+
+            <div class="form-outline">
+                <label for="confirm-password">Password</label>
+                <input type="password" id="confirm-password" @bind="users.Password" />
+            </div>
+            <button type="submit" class="btn-primary"> Sign Up</button>
+        </EditForm>
+        <p>@_message</p>
+    </div>
+</div>
+
+@code {
+
+    public User_info users = new User_info();  // Form model for user data
+    private string _message;  // Message to display after form submission
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            // Add the user to the database
+            await DatabaseService.AddUser(users);
+            _message = "User registered successfully!";
+            // Redirect to the login page after successful registration
+            NavigationManager.NavigateTo("/login");
+        }
+        catch (Exception ex)
+        {
+            _message = $"Error registering user: {ex.Message}";
+        }
+    }
+}

@@ -1,0 +1,168 @@
+﻿@page "/serene-sounds-and-breath"
+@using Microsoft.JSInterop
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject UserState UserState
+
+
+<body>
+<h1>Serene Sounds and Breath</h1>
+
+<div class="background-container">
+    <div class="content-container">
+        <div class="sound-control">
+            <h2>Choose Your Environment</h2>
+            <div class="sound-options">
+                @foreach (var sound in availableSounds)
+                {
+                    <div class="sound-option @(selectedSound == sound ? "selected" : "")" @onclick="() => SelectSound(sound)">
+                        <div class="sound-media">
+                            <img src="@GetImagePath(sound)" alt="@sound" />
+                            <button class="play-button" type="button" @onclick="@(async () => await PlayVideo(sound))">Play Video</button>
+                        </div>
+                        <span>@sound</span>
+                    </div>
+                }
+            </div>
+            <button class="control-button" type="button" @onclick="@(async () =>  StopSound())">Stop Sound</button>
+        </div>
+
+        <div class="breathing-control">
+            <h2>Guided Breathing Exercise</h2>
+            <div class="breathing-container">
+                @if (!isBreathing)
+                {
+                    <button class="control-button" @onclick="StartBreathing">Start Breathing</button>
+                }
+                else
+                {
+                    @if (currentExercise == null)
+                    {
+                        <p>All exercises completed! Woohoo!</p>
+                    }
+                    else
+                    {
+                        <div class="exercise-container">
+                            <h3>@currentExercise.Name</h3>
+                            <p>@currentExercise.Description</p>
+                            <button class="control-button" @onclick="MarkExerciseDone">Mark Done</button>
+                        </div>
+                    }
+                }
+                <button class="control-button" @onclick="StopBreathing">Stop Exercise</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+@code {
+    private string selectedSound;
+    private List<string> availableSounds = new List<string> { "Ocean Waves", "Forest Streams", "Peaceful Rain Showers", "Nature Mountains" };
+    private bool isBreathing = false;
+    private CancellationTokenSource cancellationTokenSource;
+
+    private List<Exercise> exercises = new List<Exercise>
+    {
+        new Exercise { Name = "Inhale and Exhale", Description = "Inhale deeply for 4 seconds, then exhale slowly for 4 seconds." },
+        new Exercise { Name = "Think of Good Memories", Description = "Recall and visualize pleasant memories while inhaling and exhaling deeply." },
+        new Exercise { Name = "Focused Breathing", Description = "Focus on your breath, counting each inhale and exhale. Inhale for 4 seconds, exhale for 6 seconds." },
+        new Exercise { Name = "Box Breathing", Description = "Inhale for 4 seconds, hold for 4 seconds, exhale for 4 seconds, hold for 4 seconds. Repeat for several cycles." },
+        new Exercise { Name = "Counted Breathing", Description = "Inhale deeply while counting to 4, then exhale slowly while counting to 6. Repeat for several cycles." }
+    };
+
+    private Exercise currentExercise;
+
+    private async Task PlaySound()
+    {
+        if (!string.IsNullOrEmpty(selectedSound))
+        {
+            await JSRuntime.InvokeVoidAsync("playSound", GetSoundPath(selectedSound));
+        }
+    }
+
+    private async Task StopSound()
+    {
+        await JSRuntime.InvokeVoidAsync("stopSound");
+    }
+
+    private async Task StartBreathing()
+    {
+        isBreathing = true;
+        cancellationTokenSource = new CancellationTokenSource();
+
+        foreach (var exercise in exercises)
+        {
+            currentExercise = exercise;
+            await Task.Delay(4000, cancellationTokenSource.Token); // Display each exercise for 4 seconds
+        }
+
+        isBreathing = false;
+    }
+
+    private void StopBreathing()
+    {
+        isBreathing = false;
+        cancellationTokenSource?.Cancel();
+        if (currentExercise != null)
+        {
+            currentExercise = null; // Reset exercises if stopped before completion
+        }
+    }
+
+    private void MarkExerciseDone()
+    {
+        var currentIndex = exercises.IndexOf(currentExercise);
+        if (currentIndex < exercises.Count - 1)
+        {
+            currentExercise = exercises[currentIndex + 1];
+        }
+        else
+        {
+            currentExercise = null;
+        }
+    }
+
+    private async Task SelectSound(string sound)
+    {
+        selectedSound = sound;
+        await UserState.LogPlayedMedia(sound);
+    }
+
+    private async Task PlayVideo(string sound)
+    {
+        await StopSound();  // Stop any currently playing sound
+        await UserState.LogPlayedMedia(sound);
+        NavigationManager.NavigateTo($"/play-video/{sound}");
+    }
+
+    private string GetImagePath(string sound)
+    {
+        return sound switch
+        {
+            "Ocean Waves" => "/images/ocean.jpg",
+            "Forest Streams" => "/images/forest.jpg",
+            "Peaceful Rain Showers" => "/images/rain.jpg",
+            "Nature Mountains" => "/images/mountains.jpg",
+            _ => "",
+        };
+    }
+
+    private string GetSoundPath(string sound)
+    {
+        return sound switch
+        {
+            "Ocean Waves" => "/sounds/oceansound.mp3",
+            "Forest Streams" => "/sounds/forestsound.mp3",
+            "Peaceful Rain Showers" => "/sounds/rainsound.mp3",
+            "Nature Mountains" => "/sounds/mountainsound.mp3",
+            _ => "",
+        };
+    }
+
+    public class Exercise
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
+}

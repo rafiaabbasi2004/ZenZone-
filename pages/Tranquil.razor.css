@@ -1,0 +1,112 @@
+﻿body {
+    background-image: url('/images/snow.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    font-style: italic;
+}
+
+.tranquil-header {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 60px 20px;
+    color: white;
+    text-align: center;
+    height: 100vh;
+}
+
+.tranquil-title {
+    margin-top: 100px;
+    font-size: 4em;
+    margin-bottom: 20px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.tranquil-description {
+    font-size: 1.3em;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    height: 100vh;
+}
+
+
+.guided-meditation {
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin: 0 auto;
+    /* max-width: 900px; */
+    height: 100vh;
+}
+
+.guided-meditation-title {
+    margin-top: 50px;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-style: italic;
+    color: white;
+}
+
+.guided-meditation-description {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: white;
+}
+
+.video-carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-button {
+    background-color: #120a4d;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.2em;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+    .nav-button:hover {
+        background-color: #270e8a;
+    }
+
+.meditation-section {
+    text-align: center;
+    max-width: 600px;
+}
+
+    .meditation-section h3 {
+        font-size: 2em;
+        margin-bottom: 10px;
+        font-weight: bold;
+        text-decoration: underline;
+        color: white;
+        font-style: italic;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    .meditation-section iframe {
+        display: block;
+        margin: 0 auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    }

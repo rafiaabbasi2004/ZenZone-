@@ -1,0 +1,181 @@
+﻿@page "/"
+@using testdatabase.DataLayer
+@inject UserState userState
+@inject NavigationManager Navigation
+@inject DataAccess data
+<script src="site.js"></script>
+
+
+<html>
+@if (userState.IsLoggedIn)
+{
+    <div class="welcome-message">
+        Welcome, @userState.FirstName!
+    </div>
+}
+
+<script src="https://kit.fontawesome.com/70bee7eb3e.js" crossorigin="anonymous"></script>
+<div id="header">
+    <div class="container">
+        <nav>
+            <h1 style="font-size: 200%;"><b style="color: #ff004f;">Z</b><b style="color: white;">en</b><b style="color: #ff004f;">Z</b><b style="color: white;">one</b></h1>
+            <ul id="sidemenu">
+                <li><a href="#header">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="/add">SignUp</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="header-text">
+        <p>A place to calm yourself</p>
+        <h1><span>Z</span>en<span>Z</span>one</h1>
+        <p>Tired Of hectic Day? NO worries Zen Zone is here</p>
+    </div>
+</div>
+
+<!--About-->
+<div id="about">
+    <div class="container-about">
+        <div class="box-left">
+            <h1 class="subtitle">Welcome to ZoneZone</h1>
+            <h4>
+                In the chaotic rhythm of contemporary living, finding solace and clarity can often feel like an elusive pursuit.
+                Amidst the whirlwind of responsibilities and pressures, stress, anxiety, and burnout emerge as constant companions, casting shadows over our mental and emotional well-being.
+                Enter ZenZone—a virtual sanctuary meticulously crafted to accompany you on your journey to tranquility and mindfulness.
+            </h4>
+
+            <h4>
+                At ZenZone, we understand the challenges of modern life, and we're committed to providing you with a haven of serenity right at your fingertips.
+                Our website serves as your personalized guide, offering an array of tools and resources designed to nurture your inner peace and foster emotional resilience.
+            </h4>
+        </div>
+
+        <div class="box-right">
+            <img class="image-about" src="images/Believe.png" alt="rafia" height="500" width="500">
+        </div>
+    </div>
+</div>
+
+<!--Services-->
+<section id="services">
+    <h1>Why ZenZone?</h1>
+    <div class="container-services">
+        <div class="card-cover">
+            <div class="service-card">
+                <img src="images/tranquil.jpeg" alt="Tranquil Trails Image" height="360px" width="400px">
+                <h2>Tranquil Trails</h2>
+                <p>Guided Meditation Module</p>
+                <button @onclick='@(() => NavigateToService("tranquil"))'>Learn More</button>
+
+
+            </div>
+        </div>
+        <div class="card-cover">
+            <div class="service-card">
+                <img src="images/mindful.jpeg" alt="Mindful Moments Image" height="360px" width="400px">
+                <h2>Mindful Moments</h2>
+                <p>Daily Reminders Module</p>
+              
+                <button @onclick='@(() => NavigateToService("mindful-moments"))'>Learn More</button>
+                
+            </div>
+        </div>
+        <div class="card-cover">
+            <div class="service-card">
+                <img src="images/serene.jpeg" alt="Serene Sounds and Breath Image" height="360px" width="400px">
+                <h2>Serene Sounds and Breath</h2>
+                <p>Soothing Sounds and Breathing Exercises</p>
+                <button @onclick='@(() => NavigateToService("serene-sounds-and-breath"))'>Learn More</button>
+                
+            </div>
+        </div>
+        <div class="card-cover">
+            <div class="service-card">
+                <img src="images/progres.jpeg" alt="Journey Journal Image" height="360px" width="400px">
+                <h2>Journey Journal</h2>
+                <p>Progress Tracking Module</p>
+                <button @onclick='@(() => NavigateToService("tracker"))'>Learn More</button>
+
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+<!--Contact-->
+<div id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="contact-left">
+                <h1 class="sub-title">Contact us</h1>
+                <p><i class="fa-solid fa-paper-plane"></i>rafiaabbasi2004@gmail.com</p>
+                <p><i class="fa-solid fa-phone"></i>03145355409</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-square-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="contact-right">
+                <EditForm Model="contactForm" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    <input type="text" @bind="contactForm.Name" placeholder="Your name" required>
+                    <input type="email" @bind="contactForm.Email" placeholder="email" required>
+                    <textarea @bind="contactForm.Message" rows="6" placeholder="Your Message" required></textarea>
+                    <button type="submit" class="btn btn2">Submit</button>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+<!---------copyright------------------>
+<div class="copyright">
+    <p>copyright.</p>
+</div>
+
+</html>
+
+@code {
+    private ContactFormModel contactForm = new ContactFormModel();
+
+    private async Task HandleValidSubmit()
+    {
+        if (userState.IsLoggedIn)
+        {
+            await data.SaveContactMessageAsync(contactForm.Name, contactForm.Email, contactForm.Message);
+            // Optionally, add a success message or redirect the user
+        }
+        else
+        {
+            Navigation.NavigateTo("/login");
+        }
+    }
+
+    private class ContactFormModel
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Message { get; set; }
+    }
+
+    private void NavigateToTranquilTrails()
+    {
+        NavigateToService("tranquil-trails");
+    }
+
+    private void NavigateToService(string service)
+    {
+        if (userState.IsLoggedIn)
+        {
+            Navigation.NavigateTo($"/{service}");
+        }
+        else
+        {
+            Navigation.NavigateTo("/login");
+        }
+    }
+}

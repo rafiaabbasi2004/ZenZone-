@@ -1,0 +1,56 @@
+﻿@page "/play-video/{sound}"
+@using Microsoft.AspNetCore.Components
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+@code {
+    [Parameter] public string Sound { get; set; }
+
+    private string videoUrl;
+    private string audioUrl;
+
+    protected override void OnParametersSet()
+    {
+        videoUrl = GetVideoUrl(Sound);
+        audioUrl = GetAudioUrl(Sound);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("playVideoWithSound", videoUrl, audioUrl);
+        }
+    }
+
+    private string GetVideoUrl(string sound)
+    {
+        return sound switch
+        {
+            "Ocean Waves" => "/videos/ocean.mp4",
+            "Forest Streams" => "/videos/forest.mp4",
+            "Peaceful Rain Showers" => "/videos/rain.mp4",
+            "Nature Mountains" => "/videos/mountains.mp4",
+            _ => ""
+        };
+    }
+
+    private string GetAudioUrl(string sound)
+    {
+        return sound switch
+        {
+            "Ocean Waves" => "/sounds/oceansound.mp3",
+            "Forest Streams" => "/sounds/forestsound.mp3",
+            "Peaceful Rain Showers" => "/sounds/rainsound.mp3",
+            "Nature Mountains" => "/sounds/mountainsound.mp3",
+            _ => ""
+        };
+    }
+}
+
+<div style="text-align:center;">
+    <video id="video-player" controls autoplay>
+        <source src="@videoUrl" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>

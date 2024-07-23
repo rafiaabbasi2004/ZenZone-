@@ -1,0 +1,82 @@
+﻿@page "/mindful-moments"
+@inject NavigationManager Navigation
+@inject MindfulnessExerciseService MindfulnessService
+@inject MeditationStateService MeditationState
+@inject UserState userState
+
+<body>
+    <div class="mindful-moments-container">
+        <div class="mindful-moments-header">
+            <h3 class="mindful-moments-heading">Mindful Moments</h3>
+            <p class="mindful-moments-description">Mindful Moments are brief pauses in your day dedicated to reconnecting with the present moment. These moments of mindfulness can help reduce stress, increase self-awareness, and promote overall well-being.</p>
+        </div>
+
+        @if (!MeditationState.IsMeditationStarted)
+        {
+            <button class="mindful-moments-button" @onclick="StartMindfulMoments">Start Mindful Moments</button>
+        }
+
+        <div class="separator-line"></div>
+
+        @if (MeditationState.IsMeditationStarted)
+        {
+            <div class="exercise-cards-container">
+                @foreach (var exercise in availableExercises)
+                {
+                    <div class="exercise-card" @onclick="() => SelectExercise(exercise.Id)">
+                        <img src="@exercise.ImagePath" alt="Exercise Image" class="exercise-image" />
+                        <p>@exercise.Description</p>
+                        @if (completedExercises.Any(e => e.Id == exercise.Id))
+                        {
+                            <div class="completed-label">Completed</div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+
+        <div class="separator-line"></div>
+
+        @if (completedExercises.Any())
+        {
+            <div class="completed-exercises-container">
+                <h4>Completed Exercises:</h4>
+                <ul>
+                    @foreach (var exercise in completedExercises)
+                    {
+                        <li>@exercise.Description</li>
+                    }
+                </ul>
+            </div>
+        }
+
+        @if (isAllExercisesCompleted)
+        {
+            <p class="appreciation-message"> Congragulations @userState.FirstName! <br /> You've completed all exercises! Well done! It's great that you took this time for yourself.</p>
+        }
+    </div>
+</body>
+
+@code {
+    private bool isMindfulMomentsInProgress = false;
+    private List<MindfulnessExercise> availableExercises;
+    private List<MindfulnessExercise> completedExercises;
+    private bool isAllExercisesCompleted;
+
+    protected override void OnInitialized()
+    {
+        availableExercises = MindfulnessService.GetAvailableExercises();
+        completedExercises = MindfulnessService.GetCompletedExercises(userState.Email);
+    }
+
+    private async Task StartMindfulMoments()
+    {
+        MeditationState.IsMeditationStarted = true;
+        isMindfulMomentsInProgress = true;
+    }
+
+    private void SelectExercise(int exerciseId)
+    {
+        Navigation.NavigateTo($"/exercise-details/{exerciseId}");
+    }
+}

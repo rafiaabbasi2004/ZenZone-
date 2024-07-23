@@ -1,0 +1,110 @@
+﻿@page "/login"
+@page "/login/{ReturnUrl}"
+@using testdatabase.DataLayer
+@inject NavigationManager Navigation
+@inject UserState UserState
+@inject DataAccess data
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="background-image">
+        <div class="login-container">
+            <div class="wrapper">
+                <form action="">
+                    <h1>Login</h1>
+                    <div class="input-selector">
+                        <select id="userType" @bind="userType">
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    @if (userType == "user")
+                    {
+                        <div class="input-box">
+                            <input type="email" id="email" @bind="email" />
+                            <i class='bx bxs-user'></i>
+                        </div>
+                        <div class="input-box">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" @bind="password" />
+                            <i class='bx bxs-lock-alt'></i>
+                        </div>
+                    }
+                    @if (userType == "admin")
+                    {
+                        <div class="input-box">
+                            <input type="text" id="adminUsername" @bind="adminUsername" placeholder="Admin Username" />
+                            <i class='bx bxs-user'></i>
+                        </div>
+                        <div class="input-box">
+                            <label for="adminPassword">Admin Password</label>
+                            <input type="password" id="adminPassword" @bind="adminPassword" />
+                            <i class='bx bxs-lock-alt'></i>
+                        </div>
+                    }
+                    <div class="remember-forgot">
+                        <label><input type="checkbox">Remember me</label>
+                        <a href="#">Forgot password?</a>
+                    </div>
+                    <button type="button" @onclick="HandleLogin">Login</button>
+                    @if (!string.IsNullOrEmpty(message))
+                    {
+                        <p style="color:red">@message</p>
+                    }
+
+                    <div class="register-link">
+                        <p>Don't have an account? <a href="/add"> Register </a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+@code {
+    private string userType = "user";
+    private string email;
+    private string password;
+    private string adminUsername;
+    private string adminPassword;
+    private string message;
+    [Parameter] public string ReturnUrl { get; set; } = "/";
+
+    private async Task HandleLogin()
+    {
+        if (userType == "user")
+        {
+            var user = await data.ValidateUserAsync(email, password);
+            if (user != null)
+            {
+                UserState.LogIn(user.Email, user.FirstName );
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                message = "Invalid email or password.";
+            }
+        }
+        else if (userType == "admin")
+        {
+            // Implement logic to validate admin credentials (replace with your actual logic)
+            if (adminUsername == "admin" && adminPassword == "password") // Replace with your actual admin credentials
+            {
+                Navigation.NavigateTo("/admin"); // Redirect to admin dashboard
+            }
+            else
+            {
+                message = "Invalid admin credentials.";
+            }
+        }
+    }
+}

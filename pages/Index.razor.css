@@ -1,0 +1,485 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins',sans-serif;
+    box-sizing: border-box;
+}
+
+
+body {
+    background: #080808;
+    color: #fff;
+    overflow-y: auto;
+}
+
+@viewport {
+    width =device-width;
+    initial-scale =1;
+}
+
+
+.welcome-message {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #e3f2fd;
+    color: #0d47a1;
+    font-size: 1.5em;
+    text-align: center;
+    border-radius: 5px;
+}
+
+
+
+.logo {
+    width: 140px;
+}
+
+#header {
+    width: 100%;
+    height: 100vh;
+    background-image: url(images/bg.jpg);
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+}
+
+.container {
+    padding: 10px 10% 0px 5%;
+}
+
+nav {
+    display: flex; /* Keep flexbox for layout */
+    align-items: center; /* Center navigation items vertically */
+    justify-content: space-between; /* Space items between */
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+    background-color: rgba(56, 50, 50, 0.3);
+}
+
+    nav ul li {
+        display: inline-block;
+        list-style: none;
+        margin: 10px 20px;
+    }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            position: relative;
+        }
+
+            nav ul li a::after {
+                content: '';
+                width: 0;
+                height: 3px;
+                background: #ff004f;
+                position: absolute;
+                left: 0;
+                bottom: -6px;
+                transition: 0.5s;
+            }
+
+            nav ul li a:hover::after {
+                width: 100%;
+            }
+
+.dropdown-icon { /* New element for dropdown icon */
+    display: none; /* Hide on larger screens */
+}
+
+@media only screen and (max-width: 768px) {
+    nav ul { /* Hide unordered list on mobile */
+        display: none;
+    }
+
+    .dropdown-icon { /* Show dropdown icon on mobile */
+        display: block;
+        font-size: 20px; /* Adjust font size as needed */
+        cursor: pointer; /* Indicate clickable behavior */
+        color: #fff; /* Match navigation text color */
+    }
+}
+
+.header-text {
+    color: white;
+    font-family: 'Lucida Handwriting';
+    margin-top: 10%;
+    font-size: 20px;
+    text-align: center;
+}
+
+    .header-text h1 {
+        font-size: 60px;
+        margin: 10px;
+    }
+
+        .header-text h1 span {
+            color: #ff004f;
+        }
+
+
+/*About*/
+
+#about {
+    padding: 80px 30px;
+    margin-bottom: 10%;
+}
+
+.row {
+    padding: 20px;
+}
+
+.container-about {
+    width: 100%;
+    background-color: white;
+    display: flex;
+}
+
+.box-left {
+    width: 56%;
+    height: 500px;
+    float: left;
+    box-sizing: border-box;
+    background-color: white;
+    color: black;
+    padding: 5% 20px 5% 6%;
+    text-align: justify;
+}
+
+.box-right {
+    width: 44%;
+    height: 500px;
+    box-sizing: border-box;
+    background-color: white;
+    color: black;
+    padding: 6% 5% 5% 10px;
+}
+
+.image-about {
+}
+
+.subtitle {
+    padding-top: 10%;
+    padding-bottom: 5%;
+    padding-right: 10%;
+}
+
+@media only screen and (max-width: 768px) {
+    #about {
+        margin-bottom: 10%;
+    }
+
+    .container-about {
+        flex-direction: column; /* Stack content vertically on mobile */
+    }
+
+    .box-left,
+    .box-right {
+        width: 100%; /* Make boxes full width on mobile */
+        margin-bottom: 0; /* Add margin between stacked boxes */
+    }
+
+    .box-left {
+        order: 2; /* Move box-left below box-right on mobile */
+    }
+
+    .image-about {
+        max-width: 100%;
+        max-height: 80%; /* Ensure image resizes to fit screen */
+    }
+}
+
+
+/*Service*/
+
+#services {
+    padding: 80px 30px;
+    background-color: #fff;
+    margin-top: 50px; /* Add margin to create space between sections */
+}
+
+.container-services {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.service-card {
+    width: 300px;
+    height: 100%;
+    background-color: #cec2c2;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.card-cover {
+    transition: background 0.5s, transform 0.5s;
+}
+
+    .card-cover :hover {
+        background: #c97e7e;
+        transform: translateY(-5px);
+    }
+
+
+.service-card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.service-card h2 {
+    margin-top: 20px;
+    color: #333;
+}
+
+.service-card p {
+    color: #666;
+}
+
+.service-card button {
+    background-color: #ff004f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+    .service-card button:hover {
+        background-color: #d60042;
+    }
+
+#services h1 {
+    position: center;
+    color: black;
+    font-weight: bold;
+}
+
+@media only screen and (max-width: 768px) {
+    #services {
+        margin-top: 10px;
+    }
+
+    .container-services {
+        flex-direction: column; /* Stack content vertically on mobile */
+    }
+
+    .card-cover {
+        width: 80%; /* Make boxes full width on mobile */
+        margin-bottom: 10px; /* Add margin between stacked boxes */
+        height: 70%;
+    }
+}
+
+/*--------------------------Contact-----------------------------*/
+#contact {
+    margin-top: 5%;
+    background-image: url(images/contactbg.jpeg);
+    background-size: cover;
+    background-color: rgb(0, 0, 0, 0.5);
+}
+
+.contact-left {
+    flex-basis: 35%;
+    color: white;
+}
+
+    .contact-left p {
+        margin-top: 30px;
+    }
+
+        .contact-left p i {
+            color: #ff004f;
+            margin-right: 15px;
+            font-size: 25px;
+        }
+
+.social-icons {
+    margin-top: 30px;
+}
+
+    .social-icons a {
+        text-decoration: none;
+        font-size: 30px;
+        margin-right: 15px;
+        color: #ababab;
+        display: inline-block;
+        transition: transform 0.5s;
+    }
+
+        .social-icons a:hover {
+            color: #ff004f;
+            transform: translateY(-5px);
+        }
+
+.contact-right {
+    flex-basis: 60%;
+}
+
+.btn.btn2 {
+    display: inline-block;
+    background: #ff004f;
+}
+
+.contact-right form {
+    width: 100%;
+}
+
+form input, form textarea {
+    width: 100%;
+    border: 0;
+    outline: none;
+    background: transparent;
+    border: solid;
+    border-color: darkgray;
+    padding: 15px;
+    margin: 15px 0;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 6px;
+}
+
+form bn2 {
+    padding: 14px 60px;
+    font-size: 18px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+/*---------------copyright-------------*/
+.copyright {
+    width: 100%;
+    text-align: center;
+    padding: 25px 0;
+    background: #262626;
+    font-weight: 300;
+    margin-top: 20px;
+    color: white;
+}
+
+    .copyright i {
+        color: #ff004f;
+    }
+
+.mobile-icon {
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+    .container {
+        padding: 10px; /* Reduce padding on smaller screens */
+    }
+
+    nav {
+        flex-direction: column; /* Stack navigation items vertically */
+        align-items: flex-start; /* Align navigation items to the left */
+    }
+
+    .header-text h1 {
+        font-size: 40px; /* Adjust heading size for smaller screens */
+    }
+
+    .container-about {
+        flex-direction: column; /* Stack content in about section */
+    }
+
+    .box-left,
+    .box-right {
+        width: 100%; /* Make boxes full width on mobile */
+    }
+
+    .service-card {
+        margin: 10px; /* Reduce margin between service cards */
+    }
+
+    .contact-left,
+    .contact-right {
+        flex-direction: column; /* Stack contact form elements */
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+        margin: 10px 0; /* Reduce margin between form elements */
+    }
+
+    /* Add more media queries for different screen sizes as needed */
+}
+
+/*----------------css for small screen--------------*/
+@media only screen and (max-width: 600px) {
+
+
+    nav .fa-solid {
+        display: block;
+        font-size: 25px;
+    }
+
+    nav ul {
+        background: #ff004f;
+        position: fixed;
+        top: 0;
+        right: -200px;
+        width: 200px;
+        height: 100vh;
+        padding-top: 50px;
+        z-index: 2;
+        transition: right 0.5s;
+    }
+
+        nav ul li {
+            display: block;
+            margin: 25px;
+        }
+
+        nav ul .fa-solid {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            cursor: pointer;
+        }
+
+    .subtitle {
+        font-size: 40px;
+    }
+
+    .about-col1, .about-col2 {
+        flex-basis: 100%;
+    }
+
+        .about-col1 img {
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+        }
+
+    .about-col1 {
+        margin-bottom: 30px;
+    }
+
+    .about-col2 {
+        font-size: 14px;
+    }
+
+    .tab-links {
+        font-size: 16px;
+        margin-right: 20px;
+    }
+
+    .contact-left, .contact-right {
+        flex-basis: 100%;
+    }
+
+    .copyright {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (min-width: 601px) {
+    nav .fa-solid {
+        display: none;
+    }
+}

@@ -1,0 +1,83 @@
+﻿.register-page {
+    background-image: url(images/bg.jpg);
+    background-size: cover;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+}
+
+.signup-container {
+    color:wheat;
+    background-image: url(images/bg.jpg);
+    background-size:cover;
+    border: 2px solid #000000;
+    border-style:solid;
+    border-radius: 25px;
+   
+    padding: 30px;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.6);
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    margin-bottom: 30px;
+}
+
+    .logo-container img {
+        max-width: 100%;
+        height: auto;
+    }
+
+.form-outline {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding:10px;
+}
+
+    .form-outline label {
+        color: #000000
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-outline input {
+        background-color: #f2f2f2;
+        border: none;
+        border-radius: 5px;
+        color: #333;
+        margin-bottom: 5px;
+        width: 100%;
+        box-sizing: content-box;
+        position: center;
+    }
+
+.btn-primary {
+    background-color: #1a1a07;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 10px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+    position: center;
+}
+
+    .btn-primary:hover {
+        background-color: #45a049;
+    }

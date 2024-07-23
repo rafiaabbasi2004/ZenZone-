@@ -1,0 +1,121 @@
+﻿@page "/exercise-details/{exerciseId:int}"
+@inject NavigationManager Navigation
+@inject MindfulnessExerciseService MindfulnessService
+@inject UserState userState
+<style>
+    body {
+        background-image: url('/images/bg.jpg');
+        background-size: cover;
+    }
+
+    .main {
+        background-color: rgba(070, 126, 67, 0.5);
+        color: white;
+    }
+</style>
+
+<body>
+    <div class="main" style="text-align: center; max-width: 900px; height:500px; margin: 20px auto; padding: 20px; border-radius: 10px;  box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);">
+        @if (ongoingExercise != null)
+        {
+            <div style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+                <h4>Ongoing Exercise:</h4>
+                <p>@ongoingExercise.Description</p>
+                <div style="width: 200px; height: 200px; overflow: hidden; border-radius: 10px; margin: 0 auto 20px;">
+                    <img src="@ongoingExercise.ImagePath" alt="Exercise Image" style="width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+            </div>
+            @if (isExerciseInProgress)
+            {
+                <div style="margin-top: 10px; margin-bottom: 10px;">
+                    <p>Time Remaining: @timeRemaining seconds</p>
+                </div>
+                <div style="display: flex; justify-content: center; margin-top: 20px;">
+                    <button class="btn btn-warning" style="margin:10px;" @onclick="StopTimer">Stop Timer</button>
+                    <button class="btn btn-success" style="margin:10px;" @onclick="CompleteExercise">Complete Exercise</button>
+                </div>
+            }
+            else
+            {
+                <button class="btn btn-success" @onclick="CompleteExercise">Complete Exercise</button>
+            }
+        }
+        else
+        {
+            <p>Loading exercise details...</p>
+        }
+    </div>
+</body>
+
+@code {
+    [Parameter]
+    public int ExerciseId { get; set; }
+
+    private MindfulnessExercise ongoingExercise;
+    private bool isExerciseInProgress = false;
+    private int timeRemaining;
+    private CancellationTokenSource timerCancellationTokenSource;
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+            ongoingExercise = MindfulnessService.GetExerciseById(ExerciseId);
+
+            if (ongoingExercise != null)
+            {
+                isExerciseInProgress = true;
+                timeRemaining = 60; // Set timer for one minute for the exercise
+                timerCancellationTokenSource = new CancellationTokenSource();
+
+                StartTimer();
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log the exception
+            Console.WriteLine($"Error initializing component: {ex.Message}");
+        }
+    }
+
+    private async void StartTimer()
+    {
+        try
+        {
+            while (timeRemaining > 0 && isExerciseInProgress && !timerCancellationTokenSource.Token.IsCancellationRequested)
+            {
+                await Task.Delay(1000, timerCancellationTokenSource.Token);
+                timeRemaining--;
+                InvokeAsync(StateHasChanged);
+            }
+            if (timeRemaining == 0)
+            {
+                CompleteExercise();
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            // Timer stopped by user
+        }
+    }
+
+    private void StopTimer()
+    {
+        if (isExerciseInProgress)
+        {
+            timerCancellationTokenSource.Cancel();
+            isExerciseInProgress = false;
+        }
+    }
+
+    private void CompleteExercise()
+    {
+        if (ongoingExercise != null)
+        {
+            // Mark the exercise as completed for the current user
+            MindfulnessService.AddCompletedExercise(userState.Email, ongoingExercise);
+            isExerciseInProgress = false;
+            Navigation.NavigateTo("/mindful-moments");
+        }
+    }
+}

@@ -1,0 +1,90 @@
+﻿@page "/tranquil"
+@inject NavigationManager Navigation
+@using testdatabase.DataLayer
+
+@inject TrailService TrailService
+@inject UserState UserState
+
+<body>
+    <div class="tranquil-header">
+        
+            <h1 class="tranquil-title">Tranquil Trails</h1>
+            <p class="tranquil-description">
+                Discover the transformative power of Tranquil Trails, your gateway to a calmer, more balanced life.
+                Our guided meditation sessions offer a multitude of benefits, each designed to enhance your mental well-being and unlock your full potential.
+                Experience the profound relaxation that comes from immersing yourself in guided meditation.
+                This module serves as the heart of ZenZone, offering
+                users a direct pathway to inner peace. By immersing themselves in guided
+                meditation sessions, users lay the foundation for a more mindful and centered
+                existence.
+            </p>
+       
+     
+    </div>
+    <hr class="separator">
+    
+        <div class="guided-meditation">
+            <h2 class="guided-meditation-title">Guided Meditation</h2>
+            <p class="guided-meditation-description">Enjoy any of the following videos for your guided meditation experience:</p>
+
+            <div class="video-carousel">
+                <button class="nav-button" @onclick="ShowPreviousVideo">Previous</button>
+                <div class="meditation-section">
+             
+                    <iframe width="560" height="315" src="@meditations[currentVideoIndex].Url" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen @onload="() => RecordVideoPlayback(meditations[currentVideoIndex].Title)"></iframe>
+                </div>
+                <button class="nav-button" @onclick="ShowNextVideo">Next</button>
+            </div>
+
+            
+           
+                
+            
+        </div>
+ 
+</body>
+
+@code {
+    private int currentVideoIndex = 0;
+
+    private List<MeditationVideo> meditations = new List<MeditationVideo>
+    {
+        new MeditationVideo { Title = "Sleep Meditation", Url = "https://www.youtube.com/embed/RAhYfIWWRi0" },
+        new MeditationVideo { Title = "Focus Meditation", Url = "https://www.youtube.com/embed/zSkFFW--Ma0" },
+        new MeditationVideo { Title = "Relaxing Meditation", Url = "https://www.youtube.com/embed/caq8XpjAswo" },
+        new MeditationVideo { Title = "Morning Meditation", Url = "https://www.youtube.com/embed/KgwC348gl3w" }
+    };
+
+    private void ShowPreviousVideo()
+    {
+        if (currentVideoIndex > 0)
+        {
+            currentVideoIndex--;
+        }
+    }
+
+    private void ShowNextVideo()
+    {
+        if (currentVideoIndex < meditations.Count - 1)
+        {
+            currentVideoIndex++;
+        }
+    }
+
+    private async Task RecordVideoPlayback(string videoTitle)
+    {
+        var trail = meditations.FirstOrDefault(m => m.Title == videoTitle);
+        if (trail != null)
+        {
+            var userEmail = UserState.Email;
+            var trailId = meditations.IndexOf(trail) + 1; // Assuming Trail ID corresponds to index + 1
+            await TrailService.RecordTrailProgress(userEmail, trailId);
+        }
+    }
+
+    private class MeditationVideo
+    {
+        public string Title { get; set; }
+        public string Url { get; set; }
+    }
+}
