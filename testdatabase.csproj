@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\Believe.png" />
+    <None Include="wwwroot\images\bg.jpg" />
+    <None Include="wwwroot\images\contactbg.jpeg" />
+    <None Include="wwwroot\images\mindful.jpeg" />
+    <None Include="wwwroot\images\progres.jpeg" />
+    <None Include="wwwroot\images\serene.jpeg" />
+    <None Include="wwwroot\images\theadback.jpeg" />
+    <None Include="wwwroot\images\tranquil.jpeg" />
+    <None Include="wwwroot\images\tranquilback.jpeg" />
+    <None Include="wwwroot\images\tranquilbg.jpeg" />
+    <None Include="wwwroot\js\site.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+  </ItemGroup>
+
+</Project>
