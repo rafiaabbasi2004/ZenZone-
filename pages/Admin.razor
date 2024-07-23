@@ -1,0 +1,225 @@
+@page "/admin"
+
+@using System
+@using Microsoft.AspNetCore.Components
+@using System.Data
+@using System.Threading.Tasks
+@inject MindfulnessExerciseService MindfulnessService // Inject the MindfulnessExerciseService
+@inject DatabaseService DatabaseService // Inject the database service
+@inject NavigationManager NavigationManager
+
+<div class="Main">
+    <div class="inner">
+        @if (!_showUserTable && !_showUserExercise)
+        {
+            <div class="heading">
+                <h1>Admin DashBoard</h1>
+            </div>
+
+            <div class="container">
+                <div class="card-row">
+                    <div class="card" @onclick="ShowUsers">
+                        <h4>Show Users</h4>
+                    </div>
+                    <div class="card" @onclick="ShowExercises">
+                        <h4>Show Breathing Exercises</h4>
+                    </div>
+                </div>
+
+                <div class="card-row">
+                    <div class="card" @onclick="ShowSomethingElse1">
+                        <h4>Show Something Else 1</h4>
+                    </div>
+                    <div class="card" @onclick="ShowSomethingElse2">
+                        <h4>Show Something Else 2</h4>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (_showUserExercise)
+        {
+            <table cellspacing="10" cellpadding="10" border="1" class="exercise">
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Available Exercises</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (MindfulnessExercise exercise in _exercises)
+                    {
+                        <tr>
+                            <td style="width:20%;">@exercise.Id</td>
+                            <td style="width:80%; text-align:left;">@exercise.Description</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>
+                            <button class="btn-dark" @onclick="CloseTable">close</button>
+                        </td>
+                        <td style="text-align:left;">
+                            <button class="btn-dark" @onclick="CloseTable">close</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-primary" @onclick="ShowAddExerciseForm">Add Exercise</button>
+            <button class="btn btn-danger" @onclick="ShowDeleteExerciseForm">Delete Exercise</button>
+        }
+
+        @if (_showAddExerciseForm)
+        {
+            <div class="add-exercise-form">
+                <h3>Add Exercise</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="exerciseId">ID:</label>
+                        <input type="number" class="form-control" @bind="_newExercise.Id" id="exerciseId" />
+                    </div>
+                    <div class="form-group">
+                        <label for="exerciseDescription">Description:</label>
+                        <input type="text" class="form-control" @bind="_newExercise.Description" id="exerciseDescription" />
+                    </div>
+                    <div class="form-group">
+                        <label for="exerciseImagePath">Image Path:</label>
+                        <input type="text" class="form-control" @bind="_newExercise.ImagePath" id="exerciseImagePath" />
+                    </div>
+                    <button type="button" class="btn btn-primary" @onclick="AddExercise">Add Exercise</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CancelAddExercise">Cancel</button>
+                </form>
+            </div>
+        }
+
+        @if (_showDeleteExerciseForm)
+        {
+            <div class="delete-exercise-form">
+                <h3>Delete Exercise</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="deleteExerciseId">ID:</label>
+                        <input type="number" class="form-control" @bind="_deleteExerciseId" id="deleteExerciseId" />
+                    </div>
+                    <button type="button" class="btn btn-danger" @onclick="DeleteExercise">Delete Exercise</button>
+                    <button type="button" class="btn btn-secondary" @onclick="CancelDeleteExercise">Cancel</button>
+                </form>
+            </div>
+        }
+
+        @if (_showUserTable)
+        {
+            <h3>Data Display</h3>
+            @if (_data == null)
+            {
+                <p>Loading...</p>
+            }
+            else
+            {
+                <table cellspacing="10" cellpadding="10" border="1" class="usertable">
+                    <thead>
+                        <tr>
+                            @foreach (DataColumn column in _data.Columns)
+                            {
+                                <th>@column.ColumnName</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (DataRow row in _data.Rows)
+                        {
+                            <tr>
+                                @foreach (var item in row.ItemArray)
+                                {
+                                    <td>@item</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <button class="btn-dark" @onclick="CloseTable">close</button>
+            }
+        }
+
+        
+    </div>
+</div>
+
+@code {
+    private bool _showAddExerciseForm = false;
+    private bool _showDeleteExerciseForm = false;
+    private DataTable _data;
+    private bool _showUserTable = false;
+    private bool _showUserExercise = false;
+    private List<MindfulnessExercise> _exercises;
+    private MindfulnessExercise _newExercise = new MindfulnessExercise();
+    private int _deleteExerciseId;
+
+    private async Task ShowUsers()
+    {
+        _showUserTable = true;
+        string query = "SELECT * FROM USER_INFO";
+        _data = DatabaseService.ExecuteQuery(query);
+    }
+
+    private async Task ShowExercises()
+    {
+        _showUserExercise = true;
+        _exercises = MindfulnessService.GetAvailableExercises().ToList();
+    }
+
+    private void CloseTable()
+    {
+        _showUserTable = false;
+        _showUserExercise = false;
+        _data = null;
+    }
+
+    private void ShowAddExerciseForm()
+    {
+        _showAddExerciseForm = true;
+    }
+
+    private void AddExercise()
+    {
+        // Add validation here if needed
+        MindfulnessService.AddExercise(_newExercise);
+        _newExercise = new MindfulnessExercise(); // Clear the form fields
+        _showAddExerciseForm = false; // Hide the form after adding exercise
+        _exercises = MindfulnessService.GetAvailableExercises().ToList(); // Update the list of exercises
+    }
+
+    private void CancelAddExercise()
+    {
+        _newExercise = new MindfulnessExercise(); // Clear the form fields
+        _showAddExerciseForm = false; // Hide the form
+    }
+
+    private void ShowDeleteExerciseForm()
+    {
+        _showDeleteExerciseForm = true;
+    }
+
+    private void DeleteExercise()
+    {
+        MindfulnessService.RemoveExercise(_deleteExerciseId);
+        _deleteExerciseId = 0; // Clear the form field
+        _showDeleteExerciseForm = false; // Hide the form after deleting exercise
+        _exercises = MindfulnessService.GetAvailableExercises().ToList(); // Update the list of exercises
+    }
+
+    private void CancelDeleteExercise()
+    {
+        _deleteExerciseId = 0; // Clear the form field
+        _showDeleteExerciseForm = false; // Hide the form
+    }
+
+    private async Task ShowSomethingElse1() // Replace with actual functionality
+    {
+        // Implement logic for showing something else
+    }
+
+    private async Task ShowSomethingElse2() // Replace with actual functionality
+    {
+        // Implement logic for showing something else
+    }
+}
